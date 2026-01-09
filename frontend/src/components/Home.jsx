@@ -22,7 +22,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchCourses = async () => {
       try {
         const res = await axios.get(`${backendUrl}/courses/course`, { withCredentials: true });
         setCourses(res.data.data);
@@ -30,7 +30,7 @@ function Home() {
         toast.error("Failed to load courses");
       }
     };
-    fetch();
+    fetchCourses();
   }, []);
 
   const handleLogout = async () => {
@@ -54,33 +54,20 @@ function Home() {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    initialSlide: 0,
     autoplay: true,
     autoplaySpeed: 1000,
     responsive: [
       {
         breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
-          infinite: true,
-          dots: true,
-        },
+        settings: { slidesToShow: 3, slidesToScroll: 2, infinite: true, dots: true },
       },
       {
         breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
+        settings: { slidesToShow: 2, slidesToScroll: 2 },
       },
       {
         breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
+        settings: { slidesToShow: 1, slidesToScroll: 1 },
       },
     ],
   };
@@ -98,7 +85,10 @@ function Home() {
         {/* Desktop Buttons */}
         <div className="hidden md:flex gap-3">
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition">
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border border-white rounded hover:bg-white hover:text-black transition"
+            >
               Logout
             </button>
           ) : (
@@ -113,7 +103,7 @@ function Home() {
           )}
         </div>
 
-        {/* Mobile Menu Icon */}
+        {/* Mobile Menu */}
         <div className="md:hidden">
           <button onClick={() => setShowSidebar(!showSidebar)}>
             {showSidebar ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}
@@ -124,7 +114,10 @@ function Home() {
         {showSidebar && (
           <div className="absolute top-16 right-4 bg-gray-900 border border-gray-600 rounded-lg shadow-lg p-4 z-50">
             {isLoggedIn ? (
-              <button onClick={handleLogout} className="block px-4 py-2 w-full text-left hover:bg-white hover:text-black transition">
+              <button
+                onClick={handleLogout}
+                className="block px-4 py-2 w-full text-left hover:bg-white hover:text-black transition"
+              >
                 Logout
               </button>
             ) : (
@@ -142,29 +135,38 @@ function Home() {
       </header>
 
       <main className="pt-10 pb-12 px-4">
-        
-        {/* Hero Section */}
+
+        {/* Hero */}
         <section className="max-w-3xl mx-auto text-center py-12">
           <h1 className="text-4xl md:text-5xl font-semibold text-orange-500 mb-4">Coursify</h1>
           <p className="text-gray-400 mb-6">Sharpen your skills with courses crafted by experts</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/courses" className="px-6 py-3 bg-green-500 rounded font-semibold hover:bg-white hover:text-black transition">Explore Courses</Link>
-            <Link to="/admin/signup" className="px-6 py-3 bg-blue-600 rounded font-semibold hover:bg-white hover:text-black transition">Become Instructor</Link>
-            <a href="/courseVideos" className="px-6 py-3 bg-white text-black rounded font-semibold hover:bg-green-500 hover:text-white transition">Course Videos</a>
+            <Link to="/courses" className="px-6 py-3 bg-green-500 rounded font-semibold hover:bg-white hover:text-black transition">
+              Explore Courses
+            </Link>
+            <Link to="/admin/signup" className="px-6 py-3 bg-blue-600 rounded font-semibold hover:bg-white hover:text-black transition">
+              Become Instructor
+            </Link>
+            <a href="/courseVideos" className="px-6 py-3 bg-white text-black rounded font-semibold hover:bg-green-500 hover:text-white transition">
+              Course Videos
+            </a>
           </div>
         </section>
 
-        {/* Courses Slider */}
+        {/* Courses */}
         <section className="max-w-7xl mx-auto my-8">
           {courses.length > 0 && (
             <Slider {...settings}>
-              {courses.map(c => (
-                <div key={c._id} className="p-2">
+              {courses.map(course => (
+                <div key={course._id} className="p-2">
                   <div className="bg-gray-900 rounded-lg overflow-hidden hover:scale-105 transition">
-                    <img src={c.image.url} alt={c.title} className="h-32 w-full object-cover" />
+                    <img src={course.image.url} alt={course.title} className="h-32 w-full object-cover" />
                     <div className="text-center py-4">
-                      <h3 className="whitespace-nowrap text-xl font-bold">{c.title}</h3>
-                      <Link className="mt-3 inline-block bg-orange-500 text-white py-1 px-2 rounded-full hover:bg-blue-500 transition" to={`/buy/${c._id}`}>
+                      <h3 className="whitespace-nowrap text-xl font-bold">{course.title}</h3>
+                      <Link
+                        to={`/buy/${course._id}`}
+                        className="mt-3 inline-block bg-orange-500 text-white py-1 px-3 rounded-full hover:bg-blue-500 transition"
+                      >
                         Enroll Now
                       </Link>
                     </div>
@@ -193,13 +195,13 @@ function Home() {
             </div>
           </div>
 
-          {/* ✅ UPDATED CONNECT SECTION */}
+          
           <div className="text-center sm:text-left">
             <h4 className="font-semibold mb-2">Connects</h4>
             <ul className="space-y-1">
-              <li className="hover:text-white cursor-pointer">github -piyush5009</li> 
-              <li className="hover:text-white cursor-pointer">linkedin -piyush-kumar-57b743259</li> 
-              <li className="hover:text-white cursor-pointer">instagram -piyush_singh.2107</li> 
+              <li className="hover:text-white cursor-pointer">github - shivam916582</li>
+              <li className="hover:text-white cursor-pointer">linkedin - shivam-singh-4131b5251</li>
+              <li className="hover:text-white cursor-pointer">instagram - shi_vam_2_3</li>
             </ul>
           </div>
 
